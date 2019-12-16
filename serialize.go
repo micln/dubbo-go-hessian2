@@ -18,6 +18,7 @@
 package hessian
 
 import (
+	"errors"
 	"reflect"
 )
 
@@ -61,7 +62,7 @@ func (IntegerSerializer) DecObject(d *Decoder, typ reflect.Type, cls classInfo) 
 
 	result, ok := bigInt.(*bigInteger)
 	if !ok {
-		panic("result type is not Integer, please check the whether the conversion is ok")
+		return result, errors.New("serialize: result type is not Integer, please check the whether the conversion is ok")
 	}
 
 	result.FromSignAndMag(result.Signum, result.Mag)
@@ -95,7 +96,7 @@ func (DecimalSerializer) DecObject(d *Decoder, typ reflect.Type, cls classInfo) 
 	}
 	result, ok := dec.(*big.Decimal)
 	if !ok {
-		panic("result type is not decimal,please check the whether the conversion is ok")
+		return result, errors.New("serialize: result type is not decimal, please check the whether the conversion is ok")
 	}
 	err = result.FromString(result.Value)
 	if err != nil {
